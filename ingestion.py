@@ -82,30 +82,32 @@ def merge_multiple_dataframe():
     dir_hash = calculate_directory_hash(input_folder_path)
 
     # the output will be saved in `output_folder_path/dir_hash`
-    # this will ensure if data is changed we'll make another output and not overwrite existing output.
+    # this will ensure if data is changed we'll track the output
     hash_output_dir = os.path.join(output_folder_path, dir_hash)
     if not os.path.exists(hash_output_dir):
         os.makedirs(hash_output_dir)
 
-    # save to finaldata.csv
-    output_file = os.path.join(hash_output_dir, 'finaldata.csv')
-    merged_df.to_csv(output_file, index=False)
+    save_dirs = [hash_output_dir, output_folder_path]
+    for save_dir in save_dirs:
+        # save to finaldata.csv directly in the output folder
+        output_file = os.path.join(save_dir, 'finaldata.csv')
+        merged_df.to_csv(output_file, index=False)
 
-    # create ingestedfiles.txt and save which files we've ingested
-    ingested_files_path = os.path.join(hash_output_dir, 'ingestedfiles.txt')
-    with open(ingested_files_path, 'w') as f:
-        f.write(f"Processed Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-        f.write("List of ingested files:\n")
-        for file in csv_files:
-            f.write(f"- {file}\n")
-        if integrity_issues:
-            f.write("\nData integrity check:\n")
-            for issue in integrity_issues:
-                f.write(f"- {issue}\n")
+        # create ingestedfiles.txt and save which files we've ingested
+        ingested_files_path = os.path.join(save_dir, 'ingestedfiles.txt')
+        with open(ingested_files_path, 'w') as f:
+            f.write(f"Processed Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write("List of ingested files:\n")
+            for file in csv_files:
+                f.write(f"- {file}\n")
+            if integrity_issues:
+                f.write("\nData integrity check:\n")
+                for issue in integrity_issues:
+                    f.write(f"- {issue}\n")
 
-    print(f"Completed data ingetstion. output is saved in: {hash_output_dir}")
-    print(f"number of ingested files: {len(csv_files)}")
-    print(f"number of records in final merged dataset: {len(merged_df)}")
+    print(f"Completed data ingestion. Output is saved in: {output_folder_path}")
+    print(f"Number of ingested files: {len(csv_files)}")
+    print(f"Number of records in final merged dataset: {len(merged_df)}")
 
 
 if __name__ == '__main__':
