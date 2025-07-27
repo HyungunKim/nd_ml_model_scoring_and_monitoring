@@ -29,7 +29,7 @@ This project implements a system for ML model scoring, monitoring, and automated
 ## How to Run
 
 ### Local Setup
-1. Update `config.json` to set the correct paths.
+1. Update `config.json` to set the correct paths and API port (default is 8123).
 2. Run `python fullprocess.py` to execute the entire pipeline.
 3. Set up a cron job using the command in `cronjob.txt` to automate the process.
 
@@ -39,12 +39,12 @@ This project implements a system for ML model scoring, monitoring, and automated
    docker build -t ml-monitoring .
    ```
 
-2. Run the Docker container:
+2. Run the Docker container (replace PORT with the port configured in config.json, default is 8000):
    ```
-   docker run -d -p 8000:8000 --name ml-monitoring-container ml-monitoring
+   docker run -d -p PORT:PORT --name ml-monitoring-container ml-monitoring
    ```
 
-3. Access the API at http://localhost:8000
+3. Access the API at http://localhost:PORT (where PORT is the configured port)
 
 4. To check if the cronjob is working:
    ```
@@ -75,3 +75,4 @@ The system automatically:
 - **Data Storage**: Data is now saved directly to the output folder instead of using SHA subdirectories, making it easier to find the latest data.
 - **Docker Support**: Added Docker containerization for easier deployment and consistent environment.
 - **Improved Cronjob**: Updated cronjob to work in both local and Docker environments with logging for better monitoring.
+- **Configurable Port**: API port is now configurable through config.json instead of being hardcoded, allowing for more flexibility in deployment.

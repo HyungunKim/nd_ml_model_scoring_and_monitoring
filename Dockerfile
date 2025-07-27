@@ -20,8 +20,9 @@ COPY cronjob.txt /etc/cron.d/app-cron
 RUN chmod 0644 /etc/cron.d/app-cron
 RUN crontab /etc/cron.d/app-cron
 
-# Expose port for API
-EXPOSE 8000
+# Expose port for API (should match api_port in config.json)
+# When running the container, use: docker run -p <api_port>:<api_port> ...
+EXPOSE 8123
 
 # Start command
 CMD ["bash", "-c", "service cron start && python app.py"]

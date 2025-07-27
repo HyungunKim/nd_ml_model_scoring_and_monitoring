@@ -10,7 +10,7 @@ model_path = os.path.join(config['output_model_path'])
 test_data_path = os.path.join(config['test_data_path'])
 
 # Specify a URL that resolves to your workspace
-URL = "http://127.0.0.1:8000"
+URL = f"http://127.0.0.1:{config['api_port']}"
 
 # Call each API endpoint and store the responses
 # Prediction endpoint
